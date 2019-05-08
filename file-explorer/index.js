@@ -26,12 +26,24 @@ fs.readdir(process.cwd(), (err, files) => {
       }
     });
   }
+
   //read user input when files are shown
   const read = () => {
     console.log("");
     stdout.write("    \033[33m Enter your choice: \033[39m");
     stdin.resume();
     stdin.setEncoding("utf8");
+    stdin.on("data", option);
   };
+
+  //called with the option supplied by user
+  const option = (data) => {
+    if (!files[Number(data)]) {
+      stdout.write("    \033[31m Enter your choice: \033[39m");
+    } else {
+      stdin.pause();
+    }
+  };
+
   file(0);
 });
