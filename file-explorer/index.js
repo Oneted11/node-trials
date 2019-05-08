@@ -10,9 +10,9 @@ fs.readdir(process.cwd(), (err, files) => {
     const filename = files[i];
     fs.stat(__dirname + "/" + filename, (err, stat) => {
       if (stat.isDirectory()) {
-        console.log("  " + i + "     \033[36m" + filename + "/\033[39m");
+        console.log("       " + i + "   \033[36m" + filename + "/\033[39m");
       } else {
-        console.log("    " + i + "     \033[90m" + filename + "\033[39m");
+        console.log("       " + i + "   \033[90m" + filename + "\033[39m");
       }
       i++;
       if (i == files.length) {
@@ -24,4 +24,5 @@ fs.readdir(process.cwd(), (err, files) => {
       }
     });
   }
+  file(0);
 });
