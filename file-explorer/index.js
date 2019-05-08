@@ -1,4 +1,6 @@
-const fs = require("fs");
+const fs = require("fs"),
+  stdin = process.stdin,
+  stdout = process.stdout;
 
 fs.readdir(process.cwd(), (err, files) => {
   console.log("");
@@ -6,6 +8,8 @@ fs.readdir(process.cwd(), (err, files) => {
     return console.log("          \033[31m No Files to show!\033[39m\n");
   }
   console.log("   Select which file or Directory you want to see\n");
+
+  //called for esch file in the dir
   function file(i) {
     const filename = files[i];
     fs.stat(__dirname + "/" + filename, (err, stat) => {
@@ -14,15 +18,20 @@ fs.readdir(process.cwd(), (err, files) => {
       } else {
         console.log("       " + i + "   \033[90m" + filename + "\033[39m");
       }
-      i++;
-      if (i == files.length) {
-        console.log(" ");
-        process.stdout.write("    \033[33m Enter your choice: \033[39m");
-        process.stdin.resume();
+      //   i++;
+      if (++i == files.length) {
+        read();
       } else {
         file(i);
       }
     });
   }
+  //read user input when files are shown
+  const read = () => {
+    console.log("");
+    stdout.write("    \033[33m Enter your choice: \033[39m");
+    stdin.resume();
+    stdin.setEncoding("utf8");
+  };
   file(0);
 });
