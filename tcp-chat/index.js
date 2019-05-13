@@ -16,7 +16,8 @@ const server = net.createServer(conn => {
   );
 
   conn.on("data", data => {
-    // data = data.replace("\r\n", "");
+    data = data.toString().replace("\r\n", "");
+    // the first piece of data you expect is the nickname
     if (!nickname) {
       if (users[data]) {
         conn.write("\033[93m> nickname already in use.try again: \033[39m ");
@@ -27,6 +28,15 @@ const server = net.createServer(conn => {
         for (let i in users) {
           users[i].write(
             "\033[90m > " + nickname + " joined the room\033[39m\n"
+          );
+        }
+      }
+    } else {
+      //otherwise consider it  a chat message
+      for (let i in users) {
+        if (i != nickname) {
+          users[i].write(
+            "\033[96m > " + nickname + ":\033[39m " + data + " \n"
           );
         }
       }
