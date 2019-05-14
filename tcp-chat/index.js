@@ -14,6 +14,13 @@ const server = net.createServer(conn => {
       " other people connected at this time." +
       "\n > please write your name and press enter: "
   );
+  const broadcast = (msg, exceptMyself) => {
+    for (let i in users) {
+      if (!exceptMyself || i !== nickname) {
+        users[i].write(msg);
+      }
+    }
+  };
 
   conn.on("data", data => {
     data = data.toString().replace("\r\n", "");
@@ -25,26 +32,18 @@ const server = net.createServer(conn => {
       } else {
         nickname = data;
         users[nickname] = conn;
-        for (let i in users) {
-          users[i].write(
-            "\033[90m > " + nickname + " joined the room\033[39m\n"
-          );
-        }
+        broadcast("\033[90m > " + nickname + " joined the room\033[39m\n");
       }
     } else {
       //otherwise consider it  a chat message
-      for (let i in users) {
-        if (i != nickname) {
-          users[i].write(
-            "\033[96m > " + nickname + ":\033[39m " + data + " \n"
-          );
-        }
-      }
+      broadcast("\033[96m > " + nickname + ":\033[39m " + data + " \n");
     }
   });
   count++;
   conn.on("close", () => {
     count--;
+    delete users[nickname];
+    broadcast('\033[90m > ' + nickname + ' left the room\033[39m\n');
   });
 });
 
