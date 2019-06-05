@@ -26,6 +26,9 @@ require("http")
             "<p> Your name is <em><b>" + qs.parse(body).name + "</b></em></p>"
           );
         });
+    }else{
+      res.writeHead(404)
+      res.end("Not Found")
     }
   })
   .listen(3000);
